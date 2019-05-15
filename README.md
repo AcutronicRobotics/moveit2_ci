@@ -1,4 +1,4 @@
-# MoveIt Continous Integration
+# MoveIt 2 Continous Integration
 Common Travis CI configuration for MoveIt 2 project
 
 Original authors: Dave Coleman, Isaac I. Y. Saito, Robert Haschke
