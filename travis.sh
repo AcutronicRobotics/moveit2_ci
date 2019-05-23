@@ -12,11 +12,10 @@
 export MOVEIT_CI_DIR=$(dirname ${BASH_SOURCE:-$0})  # path to the directory running the current script
 export REPOSITORY_NAME=$(basename $PWD) # name of repository, travis originally checked out
 export ROS_WS=${ROS_WS:-/root/ros_ws} # location of ROS workspace
-
 # Travis' default timeout for open source projects is 50 mins
 # If your project has a larger timeout, specify this variable in your .travis.yml file!
 MOVEIT_CI_TRAVIS_TIMEOUT=${MOVEIT_CI_TRAVIS_TIMEOUT:-47}  # 50min minus safety margin
-
+DOCKER_IMAGE=""
 # Helper functions
 source ${MOVEIT_CI_DIR}/util.sh
 
@@ -94,9 +93,8 @@ function update_system() {
    travis_fold start update "Updating system packages"
    # Update the sources
    travis_run apt-get -qq update
-
    # Make sure the packages are up-to-date
-   travis_run apt-get -qq dist-upgrade
+    #travis_run apt-get -qq dist-upgrade
 
    # Make sure autoconf is installed and python3-lxml for the tests
    travis_run apt-get -qq install -y autoconf python3-lxml
@@ -169,7 +167,7 @@ function prepare_ros_workspace() {
    if [[ "${ROS_REPO}" == acutronicrobotics ]]; then
      travis_run_simple cd $ROS_WS
      # Fetch latest repos
-     travis_run wget -O moveit.repos https://raw.githubusercontent.com/AcutronicRobotics/moveit2/master/moveit2.repos
+     travis_run wget -O moveit.repos https://raw.githubusercontent.com/AcutronicRobotics/moveit2/master_compile/moveit2.repos
      travis_run vcs import src < moveit.repos
      travis_run_simple cd $ROS_WS/src
    else
@@ -260,8 +258,8 @@ function build_workspace() {
 
    # COLCON_IGNORE packages that cause the build to fail
    # TODO: review this
-   travis_run_simple touch $ROS_WS/src/image_common/camera_calibration_parsers/COLCON_IGNORE
-   travis_run_simple touch $ROS_WS/src/image_common/camera_info_manager/COLCON_IGNORE
+   #travis_run_simple touch $ROS_WS/src/image_common/camera_calibration_parsers/COLCON_IGNORE
+   #travis_run_simple touch $ROS_WS/src/image_common/camera_info_manager/COLCON_IGNORE
 
    # For a command that doesn’t produce output for more than 10 minutes, prefix it with travis_run_wait
    travis_run_wait 60 --title "colcon build" colcon build --merge-install $COLCON_CMAKE_ARGS $COLCON_EVENT_HANDLING
