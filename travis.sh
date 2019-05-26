@@ -20,7 +20,7 @@ DOCKER_IMAGE=""
 source ${MOVEIT_CI_DIR}/util.sh
 
 # colcon output handling
-COLCON_EVENT_HANDLING="--event-handlers desktop_notification- status- console_stderr-"
+COLCON_EVENT_HANDLING="--event-handlers desktop_notification- status-"
 
 # usage: run_script BEFORE_SCRIPT  or run_script BEFORE_DOCKER_SCRIPT
 function run_script() {
@@ -110,9 +110,9 @@ function update_system() {
    export PATH=/usr/lib/ccache:$PATH
 
    # Setup rosdep - note: "rosdep init" is already setup in base ROS Docker image
-   travis_run rosdep update
+   #travis_run rosdep update
 
-   travis_fold end update
+   #travis_fold end update
 }
 
 function prepare_or_run_early_tests() {
@@ -236,7 +236,7 @@ function prepare_ros_workspace() {
    travis_run --title "List files in ROS workspace's source folder" ls --color=auto -alhF
 
    # Install source-based package dependencies
-   travis_run rosdep install -y -q -r -n --from-paths . --ignore-src --rosdistro $ROS_DISTRO --skip-keys "moveit_msgs octomap_msgs object_recognition_msgs"
+   #travis_run rosdep install -y -q -r -n --from-paths . --ignore-src --rosdistro $ROS_DISTRO --skip-keys "moveit_msgs octomap_msgs object_recognition_msgs"
 
    # Change to base of workspace
    travis_run_simple cd $ROS_WS
