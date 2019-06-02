@@ -20,7 +20,7 @@ DOCKER_IMAGE=""
 source ${MOVEIT_CI_DIR}/util.sh
 
 # colcon output handling
-COLCON_EVENT_HANDLING="--event-handlers desktop_notification- status-"
+COLCON_EVENT_HANDLING="--event-handlers desktop_notification- status- console_stderr-"
 
 # usage: run_script BEFORE_SCRIPT  or run_script BEFORE_DOCKER_SCRIPT
 function run_script() {
