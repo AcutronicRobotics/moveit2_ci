@@ -20,7 +20,7 @@ DOCKER_IMAGE=""
 source ${MOVEIT_CI_DIR}/util.sh
 
 # colcon output handling
-COLCON_EVENT_HANDLING="--event-handlers desktop_notification- status- console_stderr-"
+COLCON_EVENT_HANDLING="--event-handlers desktop_notification- status-"
 
 # usage: run_script BEFORE_SCRIPT  or run_script BEFORE_DOCKER_SCRIPT
 function run_script() {
@@ -94,7 +94,7 @@ function update_system() {
    # Update the sources
    travis_run apt-get -qq update
    # Make sure the packages are up-to-date
-    #travis_run apt-get -qq dist-upgrade
+    travis_run apt-get -qq dist-upgrade
 
    # Make sure autoconf is installed and python3-lxml for the tests
    travis_run apt-get -qq install -y autoconf python3-lxml
@@ -167,9 +167,12 @@ function prepare_ros_workspace() {
    if [[ "${ROS_REPO}" == acutronicrobotics ]]; then
      travis_run_simple cd $ROS_WS
      # Fetch latest repos
+     #TODO (LanderU) remove geometry2
      travis_run wget -O moveit.repos https://raw.githubusercontent.com/AcutronicRobotics/moveit2/master/moveit2.repos
      travis_run vcs import src < moveit.repos
      travis_run_simple cd $ROS_WS/src
+     #TODO (LanderU) remove this when the package is available from .deb
+     travis_run_simple mv geometry2/tf2_kdl ../ && rm -rf geometry2
    else
      travis_run_simple cd $ROS_WS/src
 
@@ -255,11 +258,6 @@ function build_workspace() {
 
    # Change to base of workspace
    travis_run_simple cd $ROS_WS
-
-   # COLCON_IGNORE packages that cause the build to fail
-   # TODO: review this
-   #travis_run_simple touch $ROS_WS/src/image_common/camera_calibration_parsers/COLCON_IGNORE
-   #travis_run_simple touch $ROS_WS/src/image_common/camera_info_manager/COLCON_IGNORE
 
    # For a command that doesn’t produce output for more than 10 minutes, prefix it with travis_run_wait
    travis_run_wait 60 --title "colcon build" colcon build --merge-install $COLCON_CMAKE_ARGS $COLCON_EVENT_HANDLING
