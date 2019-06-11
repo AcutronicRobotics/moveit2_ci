@@ -110,7 +110,7 @@ function update_system() {
    export PATH=/usr/lib/ccache:$PATH
 
    # Setup rosdep - note: "rosdep init" is already setup in base ROS Docker image
-   #travis_run rosdep update
+   travis_run rosdep update
 
    #travis_fold end update
 }
@@ -239,7 +239,7 @@ function prepare_ros_workspace() {
    travis_run --title "List files in ROS workspace's source folder" ls --color=auto -alhF
 
    # Install source-based package dependencies
-   #travis_run rosdep install -y -q -r -n --from-paths . --ignore-src --rosdistro $ROS_DISTRO --skip-keys "moveit_msgs octomap_msgs object_recognition_msgs"
+   travis_run rosdep install -y -q -r -n --from-paths . --ignore-src --rosdistro $ROS_DISTRO --skip-keys "moveit_msgs octomap_msgs object_recognition_msgs"
 
    # Change to base of workspace
    travis_run_simple cd $ROS_WS
