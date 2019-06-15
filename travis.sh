@@ -167,7 +167,7 @@ function prepare_ros_workspace() {
    if [[ "${ROS_REPO}" == acutronicrobotics ]]; then
      travis_run_simple cd $ROS_WS
      # Fetch latest repos
-     travis_run wget -O moveit.repos https://raw.githubusercontent.com/AcutronicRobotics/moveit2/master/moveit2.repos
+     travis_run wget -O moveit.repos https://raw.githubusercontent.com/AcutronicRobotics/moveit2/repos-remove-alphabetical/moveit2.repos
      travis_run vcs import src < moveit.repos
      travis_run_simple cd $ROS_WS/src
    else
