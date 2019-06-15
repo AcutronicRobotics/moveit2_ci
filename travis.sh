@@ -167,12 +167,9 @@ function prepare_ros_workspace() {
    if [[ "${ROS_REPO}" == acutronicrobotics ]]; then
      travis_run_simple cd $ROS_WS
      # Fetch latest repos
-     #TODO (LanderU) remove geometry2
-     travis_run wget -O moveit.repos https://raw.githubusercontent.com/AcutronicRobotics/moveit2/master/moveit2.repos
+     travis_run wget -O moveit.repos https://raw.githubusercontent.com/AcutronicRobotics/moveit2/repos-remove-geometry2/moveit2.repos
      travis_run vcs import src < moveit.repos
      travis_run_simple cd $ROS_WS/src
-     #TODO (LanderU) remove this when the package is available from .deb
-     travis_run_simple mv geometry2/tf2_kdl ../ && rm -rf geometry2
    else
      travis_run_simple cd $ROS_WS/src
 
@@ -239,7 +236,7 @@ function prepare_ros_workspace() {
    travis_run --title "List files in ROS workspace's source folder" ls --color=auto -alhF
 
    # Install source-based package dependencies
-   travis_run rosdep install -y -q -n --from-paths . --ignore-src --rosdistro $ROS_DISTRO --skip-keys "tf2_kdl"
+   travis_run rosdep install -y -q -n --from-paths . --ignore-src --rosdistro $ROS_DISTRO
    # Change to base of workspace
    travis_run_simple cd $ROS_WS
 
